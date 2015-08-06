@@ -1,8 +1,8 @@
 using Distributions
 using JSON
 
-mu = 1
-s = 0.6
+mu = 0.5
+s = 0.19
 d = Logistic( mu,s )
 
 x = [ -5, -2.5, 0, 2.5, 5 ]

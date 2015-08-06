@@ -7,12 +7,12 @@ Moment-Generating Function
 The [moment-generating function](https://en.wikipedia.org/wiki/Moment-generating_function) for a [logistic](https://en.wikipedia.org/wiki/logistic_distribution) random variable is
 
 <div class="equation" align="center" data-raw-text="
-    M_X(t) := \mathbb{E}\!\left[e^{tX}\right] = e^{\mu t}\operatorname{B}(1-st, 1+st)" data-equation="eq:mgf_function">
-	<img src="" alt="Moment-generating function (MGF) for a logistic distribution.">
+	M_X(t) := \mathbb{E}\!\left[e^{tX}\right] = e^{\mu t}\operatorname{B}(1-st, 1+st)" data-equation="eq:mgf_function">
+	<img src="https://cdn.rawgit.com/distributions-io/logistic-mgf/90aa9afe69dc3b3f060087c6ee0fa335f8dd04db/docs/img/eqn.svg" alt="Moment-generating function (MGF) for a logistic distribution.">
 	<br>
 </div>
 
-where `mu` is the location parameter and `s` is the scale parameter. In the equation `B` denotes the [Beta function](https://github.com/compute-io/beta).
+for `st ∈ (-1,1)`, where `mu` is the location parameter and `s` is the scale parameter. In above equation, `B` denotes the [Beta function](https://github.com/compute-io/beta). If `st` falls outside the interval `(-1,1)`, this module returns `NaN`.
 
 ## Installation
 
@@ -40,36 +40,36 @@ var matrix = require( 'dstructs-matrix' ),
 	t,
 	i;
 
-out = mgf( 1 );
-// returns
+out = mgf( 0.5 );
+// returns ~1.571
 
 out = mgf( -1 );
-// returns 0
+// returns +Infinity
 
-t = [ 0, 0.5, 1, 1.5, 2, 2.5 ];
+t = [ -1, -0.5, 0, 0.5, 1 ];
 out = mgf( t );
-// returns [...]
+// returns [ +Infinity, ~1.571, ~1, ~1.571, +Infinity ]
 
-t = new Int8Array( t );
+t = new Float32Array( t );
 out = mgf( t );
-// returns Float64Array( [...] )
+// returns Float64Array( [+Infinity,~1.571, ~1,~1.571,+Infinity] )
 
 t = new Float32Array( 6 );
 for ( i = 0; i < 6; i++ ) {
-	t[ i ] = i * 0.5;
+	t[ i ] = i * 0.2;
 }
 mat = matrix( t, [3,2], 'float32' );
 /*
-	[ 0  0.5
-	  1  1.5
-	  2  2.5 ]
+	[ 0    0.2
+	  0.4  0.6
+	  0.8  1  ]
 */
 
 out = mgf( mat );
 /*
-	[
-
-	   ]
+	[ ~1     ~1.069
+	  ~1.321 ~1.982
+	  ~4.276 +Infinity ]
 */
 ```
 
@@ -90,9 +90,9 @@ var t = [ 0, 0.5, 1, 1.5, 2, 2.5 ];
 
 var out = mgf( t, {
 	'mu': 9,
-	's': 0
+	's': 0.2
 });
-// returns [...]
+// returns [ ~1, ~91.515, ~8661.867, ~86756937.424, ~9284226346.037 ]
 ```
 
 For non-numeric `arrays`, provide an accessor `function` for accessing `array` values.
@@ -100,11 +100,11 @@ For non-numeric `arrays`, provide an accessor `function` for accessing `array` v
 ``` javascript
 var data = [
 	[0,0],
-	[1,0.5],
-	[2,1],
-	[3,1.5],
-	[4,2],
-	[5,2.5]
+	[1,0.2],
+	[2,0.4],
+	[3,0.6],
+	[4,0.8],
+	[5,1]
 ];
 
 function getValue( d, i ) {
@@ -114,7 +114,7 @@ function getValue( d, i ) {
 var out = mgf( data, {
 	'accessor': getValue
 });
-// returns [...]
+// returns [ ~1, ~1.069, ~1.321, ~1.982, ~4.276, +Infinity ]
 ```
 
 
@@ -123,11 +123,11 @@ To [deepset](https://github.com/kgryte/utils-deep-set) an object `array`, provid
 ``` javascript
 var data = [
 	{'x':[0,0]},
-	{'x':[1,0.5]},
-	{'x':[2,1]},
-	{'x':[3,1.5]},
-	{'x':[4,2]},
-	{'x':[5,2.5]}
+	{'x':[1,0.2]},
+	{'x':[2,0.4]},
+	{'x':[3,0.6]},
+	{'x':[4,0.8]},
+	{'x':[5,1]}
 ];
 
 var out = mgf( data, {
@@ -136,12 +136,12 @@ var out = mgf( data, {
 });
 /*
 	[
-		{'x':[0,]},
-		{'x':[1,]},
-		{'x':[2,]},
-		{'x':[3,]},
-		{'x':[4,]},
-		{'x':[5,]}
+		{'x':[0,~1]},
+		{'x':[1,~1.069]},
+		{'x':[2,~1.321]},
+		{'x':[3,~1.982]},
+		{'x':[4,~4.276]},
+		{'x':[5,+Infinity]}
 	]
 */
 
@@ -154,18 +154,18 @@ By default, when provided a [`typed array`](https://developer.mozilla.org/en-US/
 ``` javascript
 var t, out;
 
-t = new Int8Array( [0,1,2,3,4] );
+t = new Float32Array( [0,0.2,0.4,0.6,0.8] );
 
 out = mgf( t, {
 	'dtype': 'int32'
 });
-// returns Int32Array( [...] )
+// returns Int32Array( [1,1,1,1,4] )
 
 // Works for plain arrays, as well...
-out = mgf( [0,0.5,1,1.5,2], {
+out = mgf( [0,0.2,0.4,0.6,0.8], {
 	'dtype': 'uint8'
 });
-// returns Uint8Array( [...] )
+// returns Uint8Array( [1,1,1,1,4] )
 ```
 
 By default, the function returns a new data structure. To mutate the input data structure (e.g., when input values can be discarded or when optimizing memory usage), set the `copy` option to `false`.
@@ -177,34 +177,34 @@ var bool,
 	t,
 	i;
 
-t = [ 0, 0.5, 1, 1.5, 2 ];
+t = [ -1, -0.5, 0, 0.5, 1 ];
 
 out = mgf( t, {
 	'copy': false
 });
-// returns [...]
+// returns [ +Infinity, ~1.571, ~1, ~1.571, +Infinity ]
 
 bool = ( t === out );
 // returns true
 
 t = new Float32Array( 6 );
 for ( i = 0; i < 6; i++ ) {
-	t[ i ] = i * 0.5;
+	t[ i ] = i * 0.2;
 }
 mat = matrix( t, [3,2], 'float32' );
 /*
-	[ 0  0.5
-	  1  1.5
-	  2  2.5 ]
+	[ 0    0.2
+	  0.4  0.6
+	  0.8  1  ]
 */
 
 out = mgf( mat, {
 	'copy': false
 });
 /*
-	[
-
-	   ]
+	[ ~1     ~1.069
+	  ~1.321 ~1.982
+	  ~4.276 +Infinity ]
 */
 
 bool = ( mat === out );
@@ -284,7 +284,7 @@ var data,
 // Plain arrays...
 data = new Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
-	data[ i ] = i * 0.5;
+	data[ i ] = i / 10;
 }
 out = mgf( data );
 
@@ -315,7 +315,7 @@ out = mgf( data, {
 // Typed arrays...
 data = new Float32Array( 10 );
 for ( i = 0; i < data.length; i++ ) {
-	data[ i ] = i * 0.5;
+	data[ i ] = i / 10;
 }
 out = mgf( data );
 
