@@ -2,17 +2,17 @@ Moment-Generating Function
 ===
 [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coverage Status][codecov-image]][codecov-url] [![Dependencies][dependencies-image]][dependencies-url]
 
-> [logistic](https://en.wikipedia.org/wiki/logistic_distribution) distribution moment-generating function (MGF).
+> [Logistic](https://en.wikipedia.org/wiki/logistic_distribution) distribution moment-generating function (MGF).
 
 The [moment-generating function](https://en.wikipedia.org/wiki/Moment-generating_function) for a [logistic](https://en.wikipedia.org/wiki/logistic_distribution) random variable is
 
 <div class="equation" align="center" data-raw-text="
-    M_X(t) := \mathbb{E}\!\left[e^{tX}\right]" data-equation="eq:mgf_function">
+    M_X(t) := \mathbb{E}\!\left[e^{tX}\right] = e^{\mu t}\operatorname{B}(1-st, 1+st)" data-equation="eq:mgf_function">
 	<img src="" alt="Moment-generating function (MGF) for a logistic distribution.">
 	<br>
 </div>
 
-where `mu` is the location parameter and `s` is the scale parameter.
+where `mu` is the location parameter and `s` is the scale parameter. In the equation `B` denotes the [Beta function](https://github.com/compute-io/beta).
 
 ## Installation
 

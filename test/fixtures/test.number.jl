@@ -2,7 +2,7 @@ using Distributions
 using JSON
 
 mu = 0
-s = 1
+s = 1.5
 d = Logistic( mu,s )
 
 x = [ -5, -2.5, 0, 2.5, 5 ]

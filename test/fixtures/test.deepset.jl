@@ -5,7 +5,7 @@ mu = 0
 s = 1
 d = Logistic( mu,s )
 
-x = linspace( .5, -100, 100 )
+x = linspace( .5, -100, 400 )
 
 dmgf(t) = mgf(d, t )
 y = map( dmgf, x )

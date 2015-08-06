@@ -1,8 +1,8 @@
 using Distributions
 using JSON
 
-mu = 0
-s = 1
+mu = 3
+s = 4
 d = Logistic( mu,s )
 
 x = linspace( 1, 0, 25 )
